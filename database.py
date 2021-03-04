@@ -27,3 +27,15 @@ class Database:
 		]
 		[self.cursor.execute(queries[i]) for i in range(len(queries))]
 		self.connection.commit()
+
+	def research_user_by_email(self, user_email: str):
+		"""
+		This method allows you to search for a user with their email adress.
+		"""
+		try:
+			query = f"""SELECT * FROM Users WHERE email = "{user_email}";"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			return self.cursor.fetchall()
+		except (Exception, sqlite3.Error) as error:
+			print(error)
