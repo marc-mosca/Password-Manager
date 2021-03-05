@@ -4,6 +4,7 @@
 
 import sqlite3
 import os
+from system import System
 
 FILE = os.path.abspath(os.getcwd() + "/schema.sqlite3")
 
@@ -15,6 +16,7 @@ class Database:
 		"""
 		Try to connect to file and create cursor.
 		"""
+		self.system = System()
 		self.connection = None
 		try:
 			self.connection = sqlite3.connect(FILE)
@@ -37,5 +39,17 @@ class Database:
 			self.cursor.execute(query)
 			self.connection.commit()
 			return self.cursor.fetchall()
+		except (Exception, sqlite3.Error) as error:
+			print(error)
+
+	def adding_user_to_database(self, username: str, user_email: str, user_password: str):
+		"""
+		This method adds the user to the database.
+		"""
+		try:
+			query = f"""INSERT INTO Users (name, email, password) VALUES ("{username}", "{user_email}", "{user_password}");"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			return self.system.exit_program(f"{user_email} has been registered !")
 		except (Exception, sqlite3.Error) as error:
 			print(error)

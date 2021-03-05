@@ -4,6 +4,7 @@
 
 from hashlib import sha256
 from database import Database
+from graphic import Graphic
 from system import System
 
 KEY = ",m9P?@!Y{w?03Afdq<@>AhG5]-d"
@@ -50,12 +51,19 @@ class Auth:
 			self.system.exit_program(f"{user_email} is not registered !")
 		if user_informations[0][3] != user_password_hashed:
 			self.system.exit_program("Wrong password !")
-
-	# TODO register method
+		return Graphic() 
+	
 	def register(self):
 		"""
 		"""
-		pass
+		username = input("Please enter your username : ").capitalize()
+		user_email = input("Please enter your email adress : ").lower()
+		user_password = input("Please enter your password : ")
+		user_password_hashed = self.hash(user_password)
+		user_informations = self.database.research_user_by_email(user_email)
+		if user_informations != []:
+			self.system.exit_program(f"{user_email} is already used !")
+		self.database.adding_user_to_database(username, user_email, user_password_hashed)
 
 	def hash(self, password: str):
 		"""
