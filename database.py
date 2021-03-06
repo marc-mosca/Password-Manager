@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # Created by MOSCA Marc on March 04 2021
 
-import sqlite3
 import os
+import sqlite3
 from system import System
 
 FILE = os.path.abspath(os.getcwd() + "/schema.sqlite3")
@@ -25,7 +25,7 @@ class Database:
 		self.cursor = self.connection.cursor()
 		queries = [
 			"""CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT UNIQUE, password TEXT);""",
-			"""CREATE TABLE IF NOT EXISTS Accounts (id_user INTEGER UNIQUE, name TEXT, email TEXT, password TEXT, app_name TEXT, url TEXT, FOREIGN KEY("id_user") REFERENCES Users("id"));"""
+			"""CREATE TABLE IF NOT EXISTS Accounts (id_user INTEGER, app_name TEXT, identifier TEXT, password TEXT, url TEXT, FOREIGN KEY("id_user") REFERENCES "Users"("id"));"""
 		]
 		[self.cursor.execute(queries[i]) for i in range(len(queries))]
 		self.connection.commit()
@@ -51,5 +51,17 @@ class Database:
 			self.cursor.execute(query)
 			self.connection.commit()
 			return self.system.exit_program(f"{user_email} has been registered !")
+		except (Exception, sqlite3.Error) as error:
+			print(error)
+
+	def insert_new_password(self, id_user: int, app_name: str, identifier: str, password: str, url: str):
+		"""
+		This method adds the new password to the database.
+		"""
+		try:
+			query = f"""INSERT INTO Accounts VALUES ("{id_user}", "{app_name}", "{identifier}", "{password}", "{url}");"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			self.system.exit_program(f"The password for the site or the application {app_name} has been saved !")
 		except (Exception, sqlite3.Error) as error:
 			print(error)

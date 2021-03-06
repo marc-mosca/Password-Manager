@@ -2,28 +2,34 @@
 # -*- coding: utf-8 -*-
 # Created by MOSCA Marc on March 04 2021
 
+import pyperclip
+from hashlib import sha256
+from database import Database
 from system import System
 
+KEY = ",m9P?@!Y{w?03Afdq<@>AhG5]-d"
+
 class PasswordManager:
-	def __init__(self):
+	def __init__(self, id_user: int=0):
 		"""
 		Init method.
 		"""
+		self.database = Database()
 		self.system = System()
+		self.id_user = id_user
+
+	def menu(self):
+		"""
+		This method checks the data entered by the user.
+		"""
 		self.system.clear_terminal()
-		print(("-" * 25) + " Menu " + ("-" * 25))
+		print(("-" * 19) + " Menu " + ("-" * 19))
 		print("1. Create a new password")
 		print("2. Search for all sites you have registered")
 		print("3. Find a password for a site or application")
 		print("Q. Quit")
-		print("-" * 56)
+		print("-" * 44)
 		self.choice = input(": ").lower()
-		self.check()
-
-	def check(self):
-		"""
-		This method checks the data entered by the user.
-		"""
 		while self.choice != "q" and self.choice != "1" and self.choice != "2" and self.choice != "3":
 			print("Sorry, I don't understand !")
 			self.choice = input(": ").lower()
@@ -38,8 +44,22 @@ class PasswordManager:
 
 	def create_new_password(self):
 		"""
+		This method is a form to create a new password for an application or site.
 		"""
-		pass
+		app_name = input("Please enter the application name : ").capitalize()
+		identifier = input("Please enter the identifier : ")
+		password = input("Please enter the password : ")
+		url = input("Please enter the url : ").lower()
+		while app_name == "" or identifier == "" or password == "" or url == "":
+			print("\nPlease complete all fields !")
+			app_name = input("Please enter the application name : ").capitalize()
+			identifier = input("Please enter the identifier : ")
+			password = input("Please enter the password : ")
+			url = input("Please enter the url : ").lower()
+		password_hashed = self.hash(password)
+		pyperclip.copy(password_hashed)
+		pyperclip.paste()
+		self.database.insert_new_password(self.id_user, app_name, identifier, password_hashed, url)
 
 	def search_all_sites_registered(self):
 		"""
@@ -50,3 +70,9 @@ class PasswordManager:
 		"""
 		"""
 		pass	
+
+	def hash(self, password: str):
+		"""
+		This method encrypts the password passed as a parameter.
+		"""
+		return sha256((password + KEY + password).encode("utf-8")).hexdigest()

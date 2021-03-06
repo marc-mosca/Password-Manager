@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 # Created by MOSCA Marc on March 04 2021
 
-from hashlib import sha256
 from database import Database
 from password_manager import PasswordManager
 from system import System
-
-KEY = ",m9P?@!Y{w?03Afdq<@>AhG5]-d"
 
 class Auth:
 	def __init__(self):
@@ -16,6 +13,7 @@ class Auth:
 		"""
 		self.database = Database()
 		self.system = System()
+		self.password_manager = PasswordManager()
 		self.system.clear_terminal()
 		print(("-" * 4) + " Connection " + ("-" * 4))
 		print("1. Connect")
@@ -45,13 +43,14 @@ class Auth:
 		"""
 		user_email = input("\nPlease enter your email adress : ")
 		user_password = input("Please enter your password : ")
-		user_password_hashed = self.hash(user_password)
 		user_informations = self.database.research_user_by_email(user_email)
 		if user_informations == []:
 			self.system.exit_program(f"{user_email} is not registered !")
+		user_password_hashed = self.password_manager.hash(user_password)
 		if user_informations[0][3] != user_password_hashed:
 			self.system.exit_program("Wrong password !")
-		return PasswordManager()
+		self.password_manager = PasswordManager(user_informations[0][0])
+		return self.password_manager.menu() 
 	
 	def register(self):
 		"""
@@ -60,14 +59,8 @@ class Auth:
 		username = input("Please enter your username : ").capitalize()
 		user_email = input("Please enter your email adress : ").lower()
 		user_password = input("Please enter your password : ")
-		user_password_hashed = self.hash(user_password)
+		user_password_hashed = self.password_manager.hash(user_password)
 		user_informations = self.database.research_user_by_email(user_email)
 		if user_informations != []:
 			self.system.exit_program(f"{user_email} is already used !")
 		self.database.adding_user_to_database(username, user_email, user_password_hashed)
-
-	def hash(self, password: str):
-		"""
-		This method encrypts the password passed as a parameter.
-		"""
-		return sha256((password + KEY + password).encode("utf-8")).hexdigest()
