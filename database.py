@@ -50,7 +50,6 @@ class Database:
 			query = f"""INSERT INTO Users (name, email, password) VALUES ("{username}", "{user_email}", "{user_password}");"""
 			self.cursor.execute(query)
 			self.connection.commit()
-			return self.system.exit_program(f"{user_email} has been registered !")
 		except (Exception, sqlite3.Error) as error:
 			print(error)
 
@@ -62,6 +61,5 @@ class Database:
 			query = f"""INSERT INTO Accounts VALUES ("{id_user}", "{app_name}", "{identifier}", "{password}", "{url}");"""
 			self.cursor.execute(query)
 			self.connection.commit()
-			self.system.exit_program(f"The password for the site or the application {app_name} has been saved !")
 		except (Exception, sqlite3.Error) as error:
 			print(error)

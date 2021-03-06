@@ -6,3 +6,4 @@ from auth import Auth
 
 if __name__ == "__main__":
 	authentification = Auth()
+	authentification.menu()

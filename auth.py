@@ -14,19 +14,21 @@ class Auth:
 		self.database = Database()
 		self.system = System()
 		self.password_manager = PasswordManager()
+		self.alert = ""
+
+	def menu(self):
+		"""
+		This method print a menu and checks the data entered by the user.
+		"""
 		self.system.clear_terminal()
+		if self.alert != "":
+			print(f"\n{self.alert}\n")
 		print(("-" * 4) + " Connection " + ("-" * 4))
 		print("1. Connect")
 		print("2. Register")
 		print("Q. Quit")
 		print("-" * 20)
 		self.choice = input(": ").lower()
-		self.check()
-
-	def check(self):
-		"""
-		This method checks the data entered by the user.
-		"""
 		while self.choice != "q" and self.choice != "1" and self.choice != "2":
 			print("Sorry, I don't understand !")
 			self.choice = input(": ").lower()
@@ -64,3 +66,5 @@ class Auth:
 		if user_informations != []:
 			self.system.exit_program(f"{user_email} is already used !")
 		self.database.adding_user_to_database(username, user_email, user_password_hashed)
+		self.alert = f"{user_email} has been registered !"
+		self.menu()

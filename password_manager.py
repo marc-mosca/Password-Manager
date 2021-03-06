@@ -17,12 +17,15 @@ class PasswordManager:
 		self.database = Database()
 		self.system = System()
 		self.id_user = id_user
+		self.alert = ""
 
 	def menu(self):
 		"""
-		This method checks the data entered by the user.
+		This method print a menu and checks the data entered by the user.
 		"""
 		self.system.clear_terminal()
+		if self.alert != "":
+			print(f"\n{self.alert}\n")
 		print(("-" * 19) + " Menu " + ("-" * 19))
 		print("1. Create a new password")
 		print("2. Search for all sites you have registered")
@@ -60,6 +63,8 @@ class PasswordManager:
 		pyperclip.copy(password_hashed)
 		pyperclip.paste()
 		self.database.insert_new_password(self.id_user, app_name, identifier, password_hashed, url)
+		self.alert = f"The password for the site or the application {app_name} has been saved !"
+		self.menu()
 
 	def search_all_sites_registered(self):
 		"""
