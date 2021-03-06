@@ -4,7 +4,7 @@
 
 from hashlib import sha256
 from database import Database
-from graphic import Graphic
+from password_manager import PasswordManager
 from system import System
 
 KEY = ",m9P?@!Y{w?03Afdq<@>AhG5]-d"
@@ -16,7 +16,7 @@ class Auth:
 		"""
 		self.database = Database()
 		self.system = System()
-		print("\n")
+		self.system.clear_terminal()
 		print(("-" * 4) + " Connection " + ("-" * 4))
 		print("1. Connect")
 		print("2. Register")
@@ -41,7 +41,7 @@ class Auth:
 
 	def connection(self):
 		"""
-		Retrieves the data entered by the user to insert them into database.
+		This method checks if the user informations is correct for the connection.
 		"""
 		user_email = input("\nPlease enter your email adress : ")
 		user_password = input("Please enter your password : ")
@@ -51,10 +51,11 @@ class Auth:
 			self.system.exit_program(f"{user_email} is not registered !")
 		if user_informations[0][3] != user_password_hashed:
 			self.system.exit_program("Wrong password !")
-		return Graphic() 
+		return PasswordManager()
 	
 	def register(self):
 		"""
+		This method checks if the user informations is correct for the inserted in the database.
 		"""
 		username = input("Please enter your username : ").capitalize()
 		user_email = input("Please enter your email adress : ").lower()
@@ -67,5 +68,6 @@ class Auth:
 
 	def hash(self, password: str):
 		"""
+		This method encrypts the password passed as a parameter.
 		"""
 		return sha256((password + KEY + password).encode("utf-8")).hexdigest()

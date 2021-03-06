@@ -4,19 +4,19 @@
 
 from system import System
 
-class Graphic:
+class PasswordManager:
 	def __init__(self):
 		"""
 		Init method.
 		"""
 		self.system = System()
-		print("\n")
-		print(("-" * 9) + " Menu " + ("-" * 9))
+		self.system.clear_terminal()
+		print(("-" * 25) + " Menu " + ("-" * 25))
 		print("1. Create a new password")
-		print("2. Research all website who used your email adress")
-		print("3. Research password for a website or application")
+		print("2. Search for all sites you have registered")
+		print("3. Find a password for a site or application")
 		print("Q. Quit")
-		print("-" * 30)
+		print("-" * 56)
 		self.choice = input(": ").lower()
 		self.check()
 
@@ -28,10 +28,25 @@ class Graphic:
 			print("Sorry, I don't understand !")
 			self.choice = input(": ").lower()
 		if self.choice == "1":
-			print("1")
+			self.create_new_password()
 		elif self.choice == "2":
-			print("2")
+			self.search_all_sites_registered()
 		elif self.choice == "3":
-			print("3")
+			self.find_password()
 		else:
-			self.system.exit_program("You leave the program.")	
+			self.system.exit_program("You leave the program.")
+
+	def create_new_password(self):
+		"""
+		"""
+		pass
+
+	def search_all_sites_registered(self):
+		"""
+		"""
+		pass
+
+	def find_password(self):
+		"""
+		"""
+		pass	
