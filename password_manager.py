@@ -72,6 +72,9 @@ class PasswordManager:
 		"""
 		data = ("App Name: ", "Identifier: ", "Password: ", "Url: ")
 		result = self.database.search_all_sites(self.id_user)
+		if result == []:
+			self.alert = "You have not registered an account !"
+			self.menu()
 		print("\nResult:\n")
 		for row in result:
 			[print(str(data[i]) + str(row[i])) for i in range(len(row))]
