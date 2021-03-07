@@ -59,6 +59,10 @@ class PasswordManager:
 			identifier = input("Please enter the identifier : ")
 			password = input("Please enter the password : ")
 			url = input("Please enter the url : ").lower()
+		verify_app_name = self.database.research_app_name(self.id_user, app_name)
+		if verify_app_name != []:
+			self.alert = f"{app_name} is already registered !"
+			self.menu()
 		password_hashed = self.hash(password)
 		pyperclip.copy(password_hashed)
 		pyperclip.paste()
@@ -83,7 +87,7 @@ class PasswordManager:
 
 	def find_password(self):
 		"""
-		This method .
+		This method saves the password of the application that the user to request.
 		"""
 		app_name = input("Please enter the name of application/site : ").capitalize()
 		result = self.database.find_password_to_application(self.id_user, app_name)

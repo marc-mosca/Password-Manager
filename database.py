@@ -25,7 +25,7 @@ class Database:
 		self.cursor = self.connection.cursor()
 		queries = [
 			"""CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT UNIQUE, password TEXT);""",
-			"""CREATE TABLE IF NOT EXISTS Accounts (id_user INTEGER, app_name TEXT, identifier TEXT, password TEXT, url TEXT, FOREIGN KEY("id_user") REFERENCES "Users"("id"));"""
+			"""CREATE TABLE IF NOT EXISTS Accounts (id_user INTEGER, app_name TEXT UNIQUE, identifier TEXT, password TEXT, url TEXT UNIQUE, FOREIGN KEY("id_user") REFERENCES "Users"("id"));"""
 		]
 		[self.cursor.execute(queries[i]) for i in range(len(queries))]
 		self.connection.commit()
@@ -36,6 +36,18 @@ class Database:
 		"""
 		try:
 			query = f"""SELECT * FROM Users WHERE email = "{user_email}";"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			return self.cursor.fetchall()
+		except (Exception, sqlite3.Error) as error:
+			print(error)
+
+	def research_app_name(self, id_user: int, app_name: str):
+		"""
+		This method searches if the name of the application already exists.
+		"""
+		try:
+			query = f"""SELECT * FROM Accounts WHERE (id_user = "{id_user}" and app_name = "{app_name}");"""
 			self.cursor.execute(query)
 			self.connection.commit()
 			return self.cursor.fetchall()
@@ -78,7 +90,7 @@ class Database:
 
 	def find_password_to_application(self, id_user: int, app_name: str):
 		"""
-		This method .
+		This method searches for the password of an application or a site of the user who is logged in.
 		"""
 		try:
 			query = f"""SELECT password FROM Accounts WHERE (id_user = "{id_user}" and app_name = "{app_name}");"""
