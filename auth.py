@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 # Created by MOSCA Marc on March 04 2021
+# License: CC BY-NC-ND 4.0
 
 from database import Database
 from password_manager import PasswordManager
