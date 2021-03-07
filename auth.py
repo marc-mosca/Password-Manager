@@ -22,7 +22,7 @@ class Auth:
 		"""
 		self.system.clear_terminal()
 		if self.alert != "":
-			print(f"\n{self.alert}\n")
+			print(f"{self.alert}\n")
 		print(("-" * 4) + " Connection " + ("-" * 4))
 		print("1. Connect")
 		print("2. Register")

@@ -75,3 +75,15 @@ class Database:
 			return self.cursor.fetchall()
 		except (Exception, sqlite3.Error) as error:
 			print(error)
+
+	def find_password_to_application(self, id_user: int, app_name: str):
+		"""
+		This method .
+		"""
+		try:
+			query = f"""SELECT password FROM Accounts WHERE (id_user = "{id_user}" and app_name = "{app_name}");"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			return self.cursor.fetchall()
+		except (Exception, sqlite3.Error) as error:
+			print(error)

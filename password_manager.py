@@ -25,7 +25,7 @@ class PasswordManager:
 		"""
 		self.system.clear_terminal()
 		if self.alert != "":
-			print(f"\n{self.alert}\n")
+			print(f"{self.alert}\n")
 		print(("-" * 19) + " Menu " + ("-" * 19))
 		print("1. Create a new password")
 		print("2. Search for all sites you have registered")
@@ -83,8 +83,17 @@ class PasswordManager:
 
 	def find_password(self):
 		"""
+		This method .
 		"""
-		pass	
+		app_name = input("Please enter the name of application/site : ").capitalize()
+		result = self.database.find_password_to_application(self.id_user, app_name)
+		if result == []:
+			self.alert = f"{app_name} has not been registered !"
+			self.menu()
+		pyperclip.copy(result[0][0])
+		pyperclip.paste()
+		self.alert = f"The password for {app_name} has been copied to the clipboard !"
+		self.menu()
 
 	def hash(self, password: str):
 		"""
