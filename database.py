@@ -63,3 +63,15 @@ class Database:
 			self.connection.commit()
 		except (Exception, sqlite3.Error) as error:
 			print(error)
+
+	def search_all_sites(self, id_user: int):
+		"""
+		This method retrieves all accounts saved by the logged in user.
+		"""
+		try:
+			query = f"""SELECT app_name, identifier, password, url FROM Accounts WHERE id_user = "{id_user}";"""
+			self.cursor.execute(query)
+			self.connection.commit()
+			return self.cursor.fetchall()
+		except (Exception, sqlite3.Error) as error:
+			print(error)

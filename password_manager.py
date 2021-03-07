@@ -68,8 +68,15 @@ class PasswordManager:
 
 	def search_all_sites_registered(self):
 		"""
+		This method displays all accounts of the logged in user.
 		"""
-		pass
+		data = ("App Name: ", "Identifier: ", "Password: ", "Url: ")
+		result = self.database.search_all_sites(self.id_user)
+		print("\nResult:\n")
+		for row in result:
+			[print(str(data[i]) + str(row[i])) for i in range(len(row))]
+			print("")
+		print("-" * 30)
 
 	def find_password(self):
 		"""
